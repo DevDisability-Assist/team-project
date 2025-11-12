@@ -16,6 +16,7 @@ const model = ref([
       { label: '기관 담당자 대시보드', icon: 'pi pi-fw pi-home', to: { name: 'staffhome' } },
       { label: '이용자 상담신청', icon: 'pi pi-fw pi-home', to: { name: 'counseling-apply' } },
       { label: '이용자 상담내역', icon: 'pi pi-fw pi-home', to: { name: 'counseling-history' } },
+      { label: '지원계획신청서', icon: 'pi pi-fw pi-home', to: '/survey' },
       { label: 'Form Layout', icon: 'pi pi-fw pi-id-card', to: '/uikit/formlayout' },
       { label: 'Input', icon: 'pi pi-fw pi-check-square', to: '/uikit/input' },
       { label: 'Button', icon: 'pi pi-fw pi-mobile', to: '/uikit/button', class: 'rotated-icon' },

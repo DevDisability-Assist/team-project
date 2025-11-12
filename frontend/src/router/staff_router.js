@@ -14,6 +14,11 @@ const staffRouter = [
         component: () => import('@/views/pages/staff/StaffDashboard.vue'),
         // meta: { requiresAuth: false }, // 인증X
       },
+      {
+        path: '/survey',
+        name: 'survey',
+        component: () => import('@/views/uikit/Survey.vue'),
+      },
     ],
   },
 ];
