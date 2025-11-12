@@ -3,7 +3,7 @@ export default [
     path: '/login',
     name: 'login',
     component: () => import('../views/pages/Login.vue'),
-    // meta: { requiresAuth: false }, // 인증X
+    meta: { requiresAuth: false }, // 인증X
   },
   {
     path: '/home',
@@ -24,5 +24,13 @@ export default [
     path: '/signup',
     name: 'signup',
     component: () => import('@/components/SignUp.vue'),
+    path: '/counseling-apply',
+    name: 'counseling-apply',
+    component: () => import('../views/pages/user/Counseling.vue'),
+  },
+  {
+    path: '/counseling-history',
+    name: 'counseling-history',
+    component: () => import('../views/pages/user/CounselingHistory.vue'),
   },
 ];

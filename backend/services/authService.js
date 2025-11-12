@@ -10,7 +10,7 @@ const findUserById = async (userId) => {
 // 토큰 생성 (동일)
 const generateTokens = (user) => {
   const accessToken = jwt.sign(
-    { id: user.user_id, role: user.user_role, name: user.user_name },
+    { id: user.user_id, role: user.user_role },
     process.env.ACCESS_TOKEN_SECRET,
     { expiresIn: "15m" }
   );
@@ -34,6 +34,7 @@ const login = async (userId, password) => {
     throw new Error("User not found");
   }
   const user = users[0];
+  console.log("유저: ", user);
 
   // 2. 비밀번호 검증
   const match = await bcrypt.compare(password, user.password);
@@ -49,7 +50,9 @@ const login = async (userId, password) => {
   console.log(
     `[AuthService] Login Success: Tokens generated (userId: ${userId})`
   );
+
   const { accessToken, refreshToken } = generateTokens(user);
+  console.log("토큰값: ", accessToken, refreshToken);
 
   const userResponse = {
     id: user.user_id,

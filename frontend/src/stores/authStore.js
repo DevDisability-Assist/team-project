@@ -38,14 +38,25 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
+    // this.$reset()이 Pinia state와 localStorage를 모두 초기화합니다.
+
     async logout() {
-      // [수정] 백엔드 호출 제거 (쿠키가 없으므로)
-      this.$reset(); // state와 localStorage 모두 초기화
+      console.log('[AuthStore] Logout action called. Clearing state and localStorage.');
+
+      // 1. (선택) 서버에 로그아웃 통보 (필요시)
+      // 이 아키텍처에서는 필수 아님.
+      // api.post('/auth/notify-logout').catch(err => console.error(err));
+
+      // 2. Pinia state와 localStorage 초기화
+      this.$reset();
+
+      // 3. 로그인 페이지로 리디렉션
       router.push({ name: 'login' });
     },
 
     async refreshAccessToken() {
       if (!this.refreshToken) {
+        console.warn('[AuthStore] No refresh token available for refresh.');
         this.logout();
         return false;
       }

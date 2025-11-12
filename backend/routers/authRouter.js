@@ -11,6 +11,8 @@ router.post("/login", async (req, res) => {
     console.log(`data : ${userId}, ${password}`);
 
     const { jsonResponse } = await authService.login(userId, password);
+    console.log("dd: ", jsonResponse);
+
     res.status(200).json(jsonResponse);
   } catch (err) {
     res.status(401).json({ message: err.message });

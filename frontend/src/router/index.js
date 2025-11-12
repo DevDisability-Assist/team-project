@@ -7,6 +7,7 @@ import { useAuthStore } from '@/stores/authStore';
 import systemRouter from './system_router.js';
 import mainRouter from './main_router.js';
 import defaultRouter from './default_router.js';
+import staffRouter from './staff_router.js';
 
 const routes = [
   {
@@ -102,6 +103,8 @@ const routes = [
   // 2. Spread 연산자(...)를 사용해 두 배열을 하나의 'routes' 배열로 합칩니다.
   ...systemRouter,
   ...mainRouter,
+  ...defaultRouter,
+  ...staffRouter,
   // 나중에 경로 파일을 더 만들어도 여기에 계속 추가하면 됩니다.
   // ...adminRoutes,
   // ...userRoutes,

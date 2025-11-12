@@ -3,7 +3,7 @@
 // 터미널에서 'node createHash.js'로 실행합니다.
 
 const bcrypt = require("bcrypt");
-const passwordToHash = "testpassword123"; // 테스트에 사용할 비밀번호
+const passwordToHash = "1234"; // 테스트에 사용할 비밀번호
 const saltRounds = 10;
 
 console.log(`Hashing password: ${passwordToHash}`);

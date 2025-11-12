@@ -12,6 +12,10 @@ const model = ref([
     label: 'UI Components',
     items: [
       { label: '로그인', icon: 'pi pi-fw pi-sign-in', to: '/login' },
+      { label: '로그아웃', icon: 'pi pi-fw pi-sign-out', to: '/logout' },
+      { label: '기관 담당자 대시보드', icon: 'pi pi-fw pi-home', to: { name: 'staffhome' } },
+      { label: '이용자 상담신청', icon: 'pi pi-fw pi-home', to: { name: 'counseling-apply' } },
+      { label: '이용자 상담내역', icon: 'pi pi-fw pi-home', to: { name: 'counseling-history' } },
       { label: 'Form Layout', icon: 'pi pi-fw pi-id-card', to: '/uikit/formlayout' },
       { label: 'Input', icon: 'pi pi-fw pi-check-square', to: '/uikit/input' },
       { label: 'Button', icon: 'pi pi-fw pi-mobile', to: '/uikit/button', class: 'rotated-icon' },
