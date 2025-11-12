@@ -64,12 +64,7 @@ const routes = [
     name: 'documentation',
     component: () => import('@/views/pages/Documentation.vue'),
   },
-  {
-    path: '/login',
-    name: 'login',
-    component: () => import('@/views/pages/Login.vue'),
-    meta: { requiresAuth: false }, // 인증X
-  },
+
   {
     path: '/home',
     name: 'userhome',
@@ -80,7 +75,6 @@ const routes = [
     name: 'syshome',
     component: () => import('@/components/SysMain.vue'),
   },
-
   {
     path: '/landing',
     name: 'landing',
