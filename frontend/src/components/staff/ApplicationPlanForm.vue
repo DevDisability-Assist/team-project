@@ -1,65 +1,157 @@
 <script setup>
 import { ref } from 'vue';
-// 템플릿에서 사용하는 PrimeVue 컴포넌트들을 import 합니다.
-// Fluid는 PrimeVue 표준 컴포넌트가 아닌 것 같아 import에서 제외했습니다.
-// 만약 Fluid가 커스텀 컴포넌트라면 경로에 맞게 import 해주세요.
 import InputText from 'primevue/inputtext';
 import Textarea from 'primevue/textarea';
-import Select from 'primevue/select'; // PrimeVue 4+ (이전 버전은 Dropdown)
+import Select from 'primevue/select';
+import Button from 'primevue/button';
 
+// 전역 고유 id 카운터
+let formId = 0;
+
+// 폼 초기화 함수
+const createForm = () => ({
+  id: formId++, // 각 폼 고유 id
+  writer: '', //작성자
+  manager: '', //담당자
+  dropdownItem: null, //사업선택
+  amount: '', //금액
+  content: '', //내용
+  selectedFiles: [], //pdf파일
+});
+
+// 폼 배열
+const forms = ref([createForm()]);
+
+// 드롭다운 항목
 const dropdownItems = ref([
   { name: '1번 사업', code: 'Option 1' },
   { name: '2번 사업', code: 'Option 2' },
-  { name: '3번 사업', code: 'Option 2' },
-  { name: '4번 사업', code: 'Option 2' },
-  { name: '5번 사업', code: 'Option 2' },
-  { name: '6번 사업', code: 'Option 2' },
+  { name: '3번 사업', code: 'Option 3' },
+  { name: '4번 사업', code: 'Option 4' },
+  { name: '5번 사업', code: 'Option 5' },
+  { name: '6번 사업', code: 'Option 6' },
 ]);
 
-const dropdownItem = ref(null);
+// 금액 3자리 콤마
+const formatAmount = (form) => {
+  const onlyNums = form.amount.replace(/[^0-9]/g, '');
+  form.amount = onlyNums ? Number(onlyNums).toLocaleString() : '';
+};
+
+// 파일 선택
+const handleFiles = (event, form) => {
+  form.selectedFiles = Array.from(event.target.files);
+};
+
+// 버튼 동작 (각 폼별)
+const saveTemp = (form) => alert(`폼 ${form.id} 임시저장 완료!`);
+const requestApproval = (form) => alert(`폼 ${form.id} 승인요청 완료!`);
+const deleteForm = (id) => {
+  if (confirm('정말 삭제하시겠습니까?')) {
+    forms.value = forms.value.filter((f) => f.id !== id);
+  }
+};
+
+// 폼 추가
+const addForm = () => forms.value.push(createForm());
 </script>
 
 <template>
   <div class="md:w-1/2">
     <Fluid>
       <h1>지원계획 입력하기</h1>
-      <div class="flex mt-8">
-        <div class="card flex flex-col gap-4 w-full">
-          <div class="font-semibold text-xl">지원서이름</div>
-          <div class="flex flex-col md:flex-row gap-4">
+
+      <div v-for="form in forms" :key="form.id" class="flex mt-8">
+        <div class="card flex flex-col gap-4 w-full border p-4 rounded-md shadow-sm">
+          <div class="font-semibold text-xl">지원서이름 {{ form.id + 1 }}</div>
+
+          <!-- 작성자 / 담당자 -->
+          <div class="flex flex-col md:flex-row gap-2">
             <div class="flex flex-wrap gap-2 w-full">
-              <label for="firstname2">작성자</label>
-              <InputText id="firstname2" type="text" />
+              <label>작성자</label>
+              <InputText v-model="form.writer" type="text" />
             </div>
             <div class="flex flex-wrap gap-2 w-full">
-              <label for="lastname2">담당자</label>
-              <InputText id="lastname2" type="text" />
+              <label>담당자</label>
+              <InputText v-model="form.manager" type="text" />
             </div>
           </div>
 
-          <div class="flex flex-wrap">
-            <label for="address">내용</label>
-            <Textarea id="address" rows="4" />
-          </div>
-
+          <!-- 지원계획 / 금액 -->
           <div class="flex flex-col md:flex-row gap-4">
             <div class="flex flex-wrap gap-2 w-full">
-              <label for="state">지원계획</label>
+              <label>지원계획</label>
               <Select
-                id="state"
-                v-model="dropdownItem"
+                v-model="form.dropdownItem"
                 :options="dropdownItems"
                 optionLabel="name"
                 placeholder="Select One"
                 class="w-full"
-              ></Select>
-            </div>
-            <div class="flex flex-wrap gap-2 w-full">
-              <label for="zip">금액</label>
-              <InputText id="zip" type="text" />
+              />
+              <label>금액</label>
+              <InputText
+                v-model="form.amount"
+                type="text"
+                class="text-right"
+                placeholder="예: 50,000"
+                @input="formatAmount(form)"
+              />
             </div>
           </div>
+
+          <!-- 내용 -->
+          <div class="flex flex-wrap">
+            <label>내용</label>
+            <Textarea v-model="form.content" rows="4" />
+          </div>
+
+          <!-- PDF 업로드 -->
+          <div class="mt-6 border-t pt-4">
+            <h6>PDF 업로드</h6>
+            <form class="flex flex-col gap-2">
+              <input
+                :key="form.id"
+                type="file"
+                name="pdfFiles"
+                accept=".pdf"
+                multiple
+                class="border p-2 rounded"
+                @change="(e) => handleFiles(e, form)"
+              />
+
+              <ul v-if="form.selectedFiles.length" class="list-disc ml-5 text-sm text-gray-600">
+                <li v-for="(file, idx) in form.selectedFiles" :key="idx">{{ file.name }}</li>
+              </ul>
+            </form>
+          </div>
+
+          <!-- 하단 버튼 -->
+          <div class="flex justify-end gap-3 mt-6 border-t pt-4">
+            <Button
+              label="임시저장"
+              icon="pi pi-save"
+              severity="secondary"
+              @click="() => saveTemp(form)"
+            />
+            <Button
+              label="삭제"
+              icon="pi pi-trash"
+              severity="danger"
+              @click="() => deleteForm(form.id)"
+            />
+            <Button
+              label="승인요청"
+              icon="pi pi-send"
+              severity="success"
+              @click="() => requestApproval(form)"
+            />
+          </div>
         </div>
+      </div>
+
+      <!-- 추가 버튼 -->
+      <div class="flex justify-end mt-4">
+        <Button label="추가" icon="pi pi-plus" severity="info" @click="addForm" />
       </div>
     </Fluid>
   </div>

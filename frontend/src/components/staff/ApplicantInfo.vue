@@ -13,16 +13,14 @@ const applicantInfo = ref({
 </script>
 
 <template>
-  <div class="md:w-1/2">
-    <div class="card p-5 shadow-md rounded-xl bg-white">
-      <div class="font-semibold text-xl mb-4">지원자 정보</div>
+  <div class="card p-5 shadow-md rounded-xl bg-white">
+    <div class="font-semibold text-xl mb-4">지원자 정보</div>
 
-      <!-- 정보 표시 -->
-      <div class="mt-6 grid grid-cols-3 gap-y-4 gap-x-6">
-        <div v-for="(value, key) in applicantInfo" :key="key" class="flex flex-col">
-          <span class="text-gray-500 text-sm">{{ key }}</span>
-          <span class="text-gray-900 font-medium">{{ value }}</span>
-        </div>
+    <!-- 정보 표시 -->
+    <div class="mt-6 grid grid-cols-3 gap-y-4 gap-x-6">
+      <div v-for="(value, key) in applicantInfo" :key="key" class="flex flex-col">
+        <span class="text-gray-500 text-sm">{{ key }}</span>
+        <span class="text-gray-900 font-medium">{{ value }}</span>
       </div>
     </div>
   </div>
