@@ -31,7 +31,7 @@ export default defineConfig({
       '/api': {
         target: 'http://localhost:3000', // 실제 백엔드 API 서버 주소
         changeOrigin: true, // cross-origin 요청을 위해 호스트 헤더 변경
-        rewrite: (path) => path.replace(/^\/api/, ''), // 요청 경로에서 '/api' 제거
+        // rewrite: (path) => path.replace(/^\/api/, ''), // 요청 경로에서 '/api' 제거
       },
     },
   },

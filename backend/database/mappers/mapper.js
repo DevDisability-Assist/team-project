@@ -60,4 +60,5 @@ const query = async (alias, values) => {
 
 module.exports = {
   query,
+  connectionPool,
 };

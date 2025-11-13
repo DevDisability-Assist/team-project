@@ -39,4 +39,7 @@ app.use("/api/user", userRouter);
 
 // 회원가입 모듈
 const signupRouter = require("./routers/signupRouter.js");
-app.use(signupRouter);
+app.use("/register", signupRouter);
+//조사지 등록 모듈
+const surveyRouter = require("./routers/surveyRouter.js");
+app.use("/api/system/survey", surveyRouter); // 👈 프론트가 호출할 기본 주소
