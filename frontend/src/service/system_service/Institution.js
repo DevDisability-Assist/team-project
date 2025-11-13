@@ -1,4 +1,5 @@
 export const CustomerService = {
+  axios.get('http://localhost:3000/api/surveys')
   getData() {
     return [
       {

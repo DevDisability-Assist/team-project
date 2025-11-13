@@ -4,9 +4,13 @@ const users = require("./sqls/user.js");
 const consult = require("./sqls/consult.js");
 const signUp = require("./sqls/signup.js");
 
+const inquiry = require("./sqls/inquiry.js");
+const staff = require("./sqls/staff.js");
 module.exports = {
   ...boards,
   ...users,
   ...consult,
+  ...inquiry,
   ...signUp,
+  ...staff,
 };

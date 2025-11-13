@@ -19,6 +19,11 @@ const staffRouter = [
         name: 'survey',
         component: () => import('@/views/uikit/Survey.vue'),
       },
+      {
+        path: '/activityreport',
+        name: 'activityreport',
+        component: () => import('@/views/uikit/ActivityReport.vue'),
+      },
     ],
   },
 ];

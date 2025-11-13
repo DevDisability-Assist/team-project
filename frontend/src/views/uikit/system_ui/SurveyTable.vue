@@ -1,19 +1,46 @@
 <script setup>
-import { CustomerService } from '@/service/system_service/Institution';
+// 1. [삭제] CustomerService import 제거
+// import { CustomerService } from '@/service/system_service/Institution';
+
 import { ProductService } from '@/service/ProductService';
 import { FilterMatchMode, FilterOperator } from '@primevue/core/api';
-import { onBeforeMount, reactive, ref } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import SurveyDetailButton from '@/components/system/SurveyDetailButton.vue';
 import { useRouter } from 'vue-router';
-const router = useRouter();
-const customers1 = ref(null);
-const customers2 = ref(null);
-const customers3 = ref(null);
-const filters1 = ref(null);
-const loading1 = ref(null);
+import axios from 'axios'; // 👈 2. [추가] axios import
 
-const products = ref(null);
-const expandedRows = ref([]);
+const router = useRouter();
+const customers1 = ref([]);
+
+const filters1 = ref({
+  global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  name: {
+    operator: FilterOperator.AND,
+    constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
+  },
+  'country.name': {
+    operator: FilterOperator.AND,
+    constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
+  },
+  representative: { value: null, matchMode: FilterMatchMode.IN },
+  date: {
+    operator: FilterOperator.AND,
+    constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }],
+  },
+  balance: {
+    operator: FilterOperator.AND,
+    constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }],
+  },
+  status: {
+    operator: FilterOperator.OR,
+    constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }],
+  },
+  activity: { value: [0, 100], matchMode: FilterMatchMode.BETWEEN },
+  verified: { value: null, matchMode: FilterMatchMode.EQUALS },
+});
+const loading1 = ref(true); // 로딩 초기값 true로 설정
+
+const products = ref([]);
 
 const representatives = reactive([
   { name: '장애인지원센터1' },
@@ -27,23 +54,59 @@ const representatives = reactive([
   { name: '장애인지원센터9' },
 ]);
 
-onBeforeMount(() => {
+onMounted(async () => {
   ProductService.getProductsWithOrdersSmall().then((data) => (products.value = data));
-  CustomerService.getCustomersLarge().then((data) => {
-    customers1.value = data;
-    loading1.value = false;
-    customers1.value.forEach((customer) => (customer.date = new Date(customer.date)));
-  });
-  CustomerService.getCustomersLarge().then((data) => (customers2.value = data));
-  CustomerService.getCustomersMedium().then((data) => (customers3.value = data));
+
+  // 👇 3. [수정] 백엔드 API 호출 로직으로 변경
+  try {
+    // 백엔드 서버 주소 (포트 3000 확인 필요)
+
+    const response = await axios.get('/api/system/survey');
+
+    const dbData = response.data;
+
+    // 4. [중요] DB 데이터(inquiry 테이블)를 프론트엔드 테이블 구조에 맞게 변환
+    customers1.value = dbData.map((item, index) => {
+      // 1️⃣ 안전한 날짜 변환 함수
+      const parseDate = (value) => {
+        if (!value) return null; // null 또는 undefined면 그냥 null 반환
+        const date = new Date(value);
+        return isNaN(date.getTime()) ? null : date; // Invalid Date 방지
+      };
+
+      return {
+        id: item.inquiry_no ?? index, // null/undefined면 인덱스로 대체
+        name: item.inquiry_no ?? '-', // 조사지ID
+        country: {
+          name: item.inquiry_name || '이름없음', // 조사지명
+        },
+        representative: {
+          name: item.inquiry_writer || '미지정', // 담당기관
+        },
+        date: parseDate(item.created_at), // ✅ 안전한 날짜 변환
+        balance: 0, // 더미 데이터
+        status: item.inquiry_status || '미정', // 상태값 기본값
+      };
+    });
+
+    console.log('DB 데이터 로드 성공:', customers1.value);
+  } catch (error) {
+    console.error('백엔드 API 호출 실패:', error);
+    // 에러 발생 시 빈 배열로 초기화하여 테이블이 깨지지 않게 함
+    customers1.value = [];
+  } finally {
+    loading1.value = false; // 로딩 종료
+  }
 
   initFilters1();
 });
+
 function goToRegistSurvey() {
   router.push({
     name: 'RegistSurvey',
   });
 }
+
 function initFilters1() {
   filters1.value = {
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -68,24 +131,11 @@ function initFilters1() {
       operator: FilterOperator.OR,
       constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }],
     },
-    activity: { value: [0, 100], matchMode: FilterMatchMode.BETWEEN },
-    verified: { value: null, matchMode: FilterMatchMode.EQUALS },
   };
 }
 
-function expandAll() {
-  expandedRows.value = products.value.reduce((acc, p) => (acc[p.id] = true) && acc, {});
-}
-
-function collapseAll() {
-  expandedRows.value = null;
-}
-
-function formatCurrency(value) {
-  return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
-}
-
 function formatDate(value) {
+  if (!value) return '';
   return value.toLocaleDateString('en-US', {
     day: '2-digit',
     month: '2-digit',
@@ -98,15 +148,14 @@ function formatDate(value) {
   <div class="card">
     <div class="font-semibold text-xl mb-4">조사지 관리</div>
     <DataTable
+      v-model:filters="filters1"
       :value="customers1"
       :paginator="true"
       :rows="10"
       dataKey="id"
       :rowHover="true"
-      v-model:filters="filters1"
       filterDisplay="menu"
       :loading="loading1"
-      :filters="filters1"
       :globalFilterFields="['name', 'country.name', 'representative.name', 'balance', 'status']"
       showGridlines
     >
@@ -164,7 +213,7 @@ function formatDate(value) {
         </template>
       </Column>
       <Column
-        header="담당기관"
+        header="작성자"
         filterField="representative"
         :showFilterMatchModes="false"
         :filterMenuStyle="{ width: '14rem' }"

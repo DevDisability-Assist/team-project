@@ -6,7 +6,7 @@ const systemRouter = [
     component: AppLayout,
     children: [
       {
-        path: '/',
+        path: '/system',
         name: 'sysDashboard',
         component: () => import('@/views/System_Dashboard.vue'),
       },
@@ -37,7 +37,7 @@ const systemRouter = [
       },
       {
         path: '/system/survey',
-        name: 'tree',
+        name: 'SurveyList',
         component: () => import('@/views/uikit/system_ui/SurveyTable.vue'),
       },
       {
