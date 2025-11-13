@@ -4,6 +4,7 @@ import AppLayout from '@/layout/AppLayout.vue';
 // 예: import About from '@/views/About.vue'
 import mainPage from './mainPage.js';
 import staffRouter from './staff_router.js';
+import userRouter from './userRouter.js';
 const mainRouter = [
   {
     path: '/',
@@ -21,6 +22,7 @@ const mainRouter = [
       },
       ...mainPage,
       ...staffRouter,
+      ...userRouter,
     ],
   },
 ];
