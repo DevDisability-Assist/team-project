@@ -1,7 +1,8 @@
 <script setup>
 import ApplicantInfo from '@/components/staff/ApplicantInfo.vue';
 import SelectCategory from '@/components/staff/SelectCategory.vue';
-import ApplicationPlanForm from '@/components/staff/ApplicationPlanForm.vue';
+// import ApplicationPlanForm from '@/components/staff/ApplicationPlanForm.vue';
+import AppReportRegistration from '@/components/staff/AppReportRegistration.vue';
 </script>
 
 <template>
@@ -15,7 +16,8 @@ import ApplicationPlanForm from '@/components/staff/ApplicationPlanForm.vue';
     <!-- 오른쪽 열: ApplicationPlanForm -->
     <div class="w-full md:w-1/2 flex">
       <!-- 오른쪽 컴포넌트가 전체 높이 차지 -->
-      <ApplicationPlanForm class="flex-1" />
+      <!-- <ApplicationPlanForm class="flex-1" /> -->
+      <AppReportRegistration class="flex-1" />
     </div>
   </div>
 </template>

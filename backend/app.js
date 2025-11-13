@@ -43,3 +43,6 @@ app.use("/register", signupRouter);
 //조사지 등록 모듈
 const surveyRouter = require("./routers/surveyRouter.js");
 app.use("/api/system/survey", surveyRouter); // 👈 프론트가 호출할 기본 주소
+//유저 모듈
+const staffRouter = require("./routers/staffRouter");
+app.use("/staff", staffRouter);

@@ -11,19 +11,15 @@ let formId = 0;
 // 폼 초기화 함수
 const createForm = () => ({
   id: formId++, // 각 폼 고유 id
-  writer: '', //작성자
-  manager: '', //담당자
-  dropdownItem: null, //사업선택
-  amount: '', //금액
-  content: '', //내용
-  selectedFiles: [], //pdf파일
+  amount: '', // 금액
+  businessItem: null, // 지원사업
 });
 
 // 폼 배열
 const forms = ref([createForm()]);
 
-// 드롭다운 항목
-const dropdownItems = ref([
+// 지원사업 드롭다운 항목
+const businessItems = ref([
   { name: '1번 사업', code: 'Option 1' },
   { name: '2번 사업', code: 'Option 2' },
   { name: '3번 사업', code: 'Option 3' },
@@ -32,15 +28,10 @@ const dropdownItems = ref([
   { name: '6번 사업', code: 'Option 6' },
 ]);
 
-// 금액 3자리 콤마
+// 금액 3자리 콤마 처리
 const formatAmount = (form) => {
   const onlyNums = form.amount.replace(/[^0-9]/g, '');
   form.amount = onlyNums ? Number(onlyNums).toLocaleString() : '';
-};
-
-// 파일 선택
-const handleFiles = (event, form) => {
-  form.selectedFiles = Array.from(event.target.files);
 };
 
 // 버튼 동작 (각 폼별)
@@ -61,30 +52,21 @@ const addForm = () => forms.value.push(createForm());
     <Fluid>
       <div v-for="form in forms" :key="form.id" class="flex mt-8">
         <div class="card flex flex-col gap-4 w-full border p-4 rounded-md shadow-sm">
-          <!-- 작성자 / 담당자 -->
+          <!-- 사업결과 -->
           <div class="flex flex-col md:flex-row gap-2">
             <div class="flex flex-wrap gap-2 w-full">
-              <label>작성자</label>
-              <InputText v-model="form.writer" type="text" />
-            </div>
-            <div class="flex flex-wrap gap-2 w-full">
-              <label>담당자</label>
-              <InputText v-model="form.manager" type="text" />
+              <label>사업결과</label>
+              <InputText
+                type="text"
+                placeholder="승인 요청 내용 / 피보호자 장애 / 피보호자 이름 / 보호자 이름 / 조사지 유형"
+                class="w-full"
+              />
             </div>
           </div>
 
-          <!-- 지원계획 / 금액 -->
-          <div class="flex flex-col md:flex-row gap-4">
+          <div class="flex flex-col md:flex-row gap-2">
             <div class="flex flex-wrap gap-2 w-full">
-              <label>지원계획</label>
-              <Select
-                v-model="form.dropdownItem"
-                :options="dropdownItems"
-                optionLabel="name"
-                placeholder="Select One"
-                class="w-full"
-              />
-              <label>금액</label>
+              <label>지원금액</label>
               <InputText
                 v-model="form.amount"
                 type="text"
@@ -93,32 +75,22 @@ const addForm = () => forms.value.push(createForm());
                 @input="formatAmount(form)"
               />
             </div>
-          </div>
-
-          <!-- 내용 -->
-          <div class="flex flex-wrap">
-            <label>내용</label>
-            <Textarea v-model="form.content" rows="4" />
-          </div>
-
-          <!-- PDF 업로드 -->
-          <div class="mt-6 border-t pt-4">
-            <h6>PDF 업로드</h6>
-            <form class="flex flex-col gap-2">
-              <input
-                :key="form.id"
-                type="file"
-                name="pdfFiles"
-                accept=".pdf"
-                multiple
-                class="border p-2 rounded"
-                @change="(e) => handleFiles(e, form)"
+            <div class="flex flex-wrap gap-2 w-full">
+              <label>지원사업</label>
+              <Select
+                v-model="form.businessItem"
+                :options="businessItems"
+                optionLabel="name"
+                placeholder="Select One"
+                class="w-full"
               />
+            </div>
+          </div>
 
-              <ul v-if="form.selectedFiles.length" class="list-disc ml-5 text-sm text-gray-600">
-                <li v-for="(file, idx) in form.selectedFiles" :key="idx">{{ file.name }}</li>
-              </ul>
-            </form>
+          <!-- 상세내역 -->
+          <div class="flex flex-wrap">
+            <label>상세내역</label>
+            <Textarea rows="4" />
           </div>
 
           <!-- 하단 버튼 -->
