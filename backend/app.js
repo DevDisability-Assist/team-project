@@ -24,8 +24,6 @@ app.get("/", (req, res) => {
 });
 
 //라우팅 모듈 등록  endpoint에 위치한 미들웨어랑 다를게 없음
-const boardRouter = require("./routers/router.js");
-app.use("/", boardRouter);
 
 // [신규] 인증 라우터 등록
 console.log("[app.js] 2. Loading authRouter...");
@@ -42,7 +40,10 @@ const signupRouter = require("./routers/signupRouter.js");
 app.use("/register", signupRouter);
 //조사지 등록 모듈
 const surveyRouter = require("./routers/surveyRouter.js");
-app.use("/system/survey", surveyRouter); // 👈 프론트가 호출할 기본 주소
+app.use("/system/survey", surveyRouter);
+
 //유저 모듈
 const staffRouter = require("./routers/staffRouter");
 app.use("/staff", staffRouter);
+const boardRouter = require("./routers/router.js");
+app.use("/", boardRouter);

@@ -14,12 +14,12 @@ export function RegistSurveyForm() {
     { name: '사업명 2', code: 'Business 2' },
   ]);
   const statuses = ref([
-    { name: '0', code: ' 0' },
-    { name: '1', code: ' 1' },
+    { name: '상태1', code: 0 },
+    { name: '상태2', code: 1 },
   ]);
   const responses = ref([
-    { name: '서술형', code: 'response 1' },
-    { name: 'O/X', code: 'response 2' },
+    { name: '서술형', code: 1 },
+    { name: 'O/X', code: 2 },
   ]);
   const priorityList = ref([
     { name: '긴급', code: 'priority 1' },
