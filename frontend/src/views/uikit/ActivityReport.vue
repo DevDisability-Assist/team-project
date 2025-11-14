@@ -1,4 +1,5 @@
 <script setup>
+import axios from 'axios';
 import { ref, onBeforeMount } from 'vue';
 import { FilterMatchMode } from '@primevue/core/api';
 import Button from 'primevue/button';
@@ -26,7 +27,7 @@ const getStatusSeverity = (status) => {
   switch (status) {
     case '접수':
       return 'info';
-    case '중점':
+    case '심사중':
       return 'warning';
     case '반려':
       return 'danger';
@@ -35,50 +36,17 @@ const getStatusSeverity = (status) => {
   }
 };
 
-// 초기 데이터 로드
-onBeforeMount(() => {
+onBeforeMount(async () => {
   initFilters();
-
-  surveys.value = [
-    {
-      survey_no: 1,
-      ward_no: 101,
-      business_name: '복지 지원사업 만족도 조사',
-      purpose: '사업의 효율성 평가',
-      content: '설문 응답자들의 만족도 조사 결과 수집',
-      writer: '김민수',
-      status: '접수',
-      modify_reason: null,
-      created_at: '2025-11-01 09:30:00',
-      updated_at: '2025-11-02 14:20:00',
-    },
-    {
-      survey_no: 2,
-      ward_no: 102,
-      business_name: '장애인 지원 프로그램 설문',
-      purpose: '프로그램 개선안 도출',
-      content: '이용자 의견 기반의 개선사항 분석',
-      writer: '박지영',
-      status: '심사중',
-      modify_reason: '설문 문항 수정 요청',
-      created_at: '2025-11-03 10:15:00',
-      updated_at: '2025-11-05 13:45:00',
-    },
-    {
-      survey_no: 3,
-      ward_no: 103,
-      business_name: '긴급 돌봄 서비스 현황 조사',
-      purpose: '서비스 만족도 및 수요 파악',
-      content: '대상자별 돌봄 지원 현황 파악',
-      writer: '이철수',
-      status: '반려',
-      modify_reason: '조사 범위 미흡',
-      created_at: '2025-10-29 11:00:00',
-      updated_at: '2025-10-30 16:30:00',
-    },
-  ];
-
-  loading.value = false;
+  try {
+    const res = await axios.get('/api/staff'); // ⭐ 여기로 DB 조회됨
+    console.log('res', res);
+    surveys.value = res.data; // ⭐ DB → Vue DataTable 바로 연결
+  } catch (err) {
+    console.error('Survey 조회 오류:', err);
+  } finally {
+    loading.value = false;
+  }
 });
 
 // 게시글 작성 버튼
@@ -110,7 +78,6 @@ const viewDetails = (survey) => {
         <span class="text-sm font-medium text-gray-700">토글 필터:</span>
         <InputSwitch v-model="toggleState" />
       </div>
-      <Button label="조사지 작성" icon="pi pi-pencil" @click="writePost" />
     </div>
 
     <!-- 데이터 테이블 -->
@@ -126,7 +93,6 @@ const viewDetails = (survey) => {
       stripedRows
     >
       <Column field="survey_no" header="조사지번호" :sortable="true" style="min-width: 8rem" />
-      <Column field="ward_no" header="구역번호" :sortable="true" style="min-width: 6rem" />
       <Column field="business_name" header="사업명" :sortable="true" style="min-width: 15rem" />
       <Column field="purpose" header="목적" :sortable="true" style="min-width: 15rem" />
       <Column field="content" header="내용" :sortable="true" style="min-width: 20rem" />
@@ -143,15 +109,31 @@ const viewDetails = (survey) => {
       </Column>
 
       <!-- 수정사유 (값이 있을 때만 표시) -->
-      <Column field="modify_reason" header="수정사유" :sortable="true" style="min-width: 15rem">
+      <!-- <Column field="created_at" header="작성일"> -->
+      <!-- <template #body="slotProps">
+          {{ new Date(slotProps.data.created_at).toLocaleString() }}
+        </template>
+      </Column> -->
+
+      <Column field="created_at" header="작성일" :sortable="true" style="min-width: 12rem">
         <template #body="slotProps">
-          <span v-if="slotProps.data.modify_reason">{{ slotProps.data.modify_reason }}</span>
-          <span v-else class="text-gray-400 italic">-</span>
+          {{
+            slotProps.data.created_at
+              ? new Date(slotProps.data.created_at).toLocaleDateString()
+              : '-'
+          }}
         </template>
       </Column>
 
-      <Column field="created_at" header="작성일" :sortable="true" style="min-width: 12rem" />
-      <Column field="updated_at" header="수정일" :sortable="true" style="min-width: 12rem" />
+      <Column field="updated_at" header="수정일" :sortable="true" style="min-width: 12rem">
+        <template #body="slotProps">
+          {{
+            slotProps.data.updated_at
+              ? new Date(slotProps.data.updated_at).toLocaleDateString()
+              : '-'
+          }}
+        </template>
+      </Column>
 
       <!-- 관리 버튼 -->
       <Column header="관리" style="min-width: 8rem; text-align: center">

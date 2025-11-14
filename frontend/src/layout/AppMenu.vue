@@ -21,6 +21,7 @@ const model = ref([
       { label: '이용자 상담내역', icon: 'pi pi-fw pi-home', to: { name: 'counseling-history' } },
       { label: '지원계획신청서', icon: 'pi pi-fw pi-home', to: '/survey' },
       { label: '담당자신청서조회', icon: 'pi pi-fw pi-home', to: '/activityreport' },
+      { label: '관리자승인요청조회', icon: 'pi pi-fw pi-home', to: '/test' },
       { label: 'Form Layout', icon: 'pi pi-fw pi-id-card', to: '/uikit/formlayout' },
       { label: 'Input', icon: 'pi pi-fw pi-check-square', to: '/uikit/input' },
       { label: 'Button', icon: 'pi pi-fw pi-mobile', to: '/uikit/button', class: 'rotated-icon' },
