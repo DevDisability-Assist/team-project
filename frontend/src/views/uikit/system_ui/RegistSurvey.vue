@@ -104,12 +104,55 @@ onBeforeMount(() => {
                 placeholder="유형을 선택하세요"
                 class="w-full"
               ></Select>
+              <div v-if="question.responseType" class="mt-4 p-3 border rounded-md bg-gray-50">
+                <label class="font-medium text-sm text-gray-600">답변 예시 (미리보기)</label>
+
+                <div
+                  v-if="question.responseType.name === 'O/X'"
+                  class="flex items-center gap-4 mt-2"
+                >
+                  <div class="flex items-center">
+                    <RadioButton
+                      :inputId="'preview-ox-o-' + index"
+                      :name="'preview-ox-' + index"
+                      value="O"
+                      disabled
+                    />
+                    <label :for="'preview-ox-o-' + index" class="ml-2 text-gray-700">O</label>
+                  </div>
+                  <div class="flex items-center">
+                    <RadioButton
+                      :inputId="'preview-ox-x-' + index"
+                      :name="'preview-ox-' + index"
+                      value="X"
+                      disabled
+                    />
+                    <label :for="'preview-ox-x-' + index" class="ml-2 text-gray-700">X</label>
+                  </div>
+                </div>
+
+                <div v-else-if="question.responseType.name === '서술형'" class="mt-2">
+                  <Textarea
+                    :id="'preview-text-' + index"
+                    rows="3"
+                    class="w-full"
+                    placeholder="사용자가 답변을 입력하는 공간입니다."
+                    disabled
+                  />
+                </div>
+
+                <div v-else class="mt-2 text-gray-500 text-sm">
+                  ({{ question.responseType.name }} 유형의 답변란이 표시됩니다)
+                </div>
+              </div>
 
               <div class="flex items-center gap-2">
                 <Checkbox
                   v-model="question.required"
                   :inputId="'essential-' + index"
                   :binary="true"
+                  :true-Value="1"
+                  :false-Value="0"
                 />
                 <label :for="'essential-' + index">필수 여부</label>
               </div>

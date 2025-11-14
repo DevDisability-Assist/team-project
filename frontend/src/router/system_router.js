@@ -44,7 +44,7 @@ const systemRouter = [
         path: '/system/survey/detail/:id',
         name: 'SurveyDetail',
         // 이 라우트가 로드할 실제 상세 페이지 컴포넌트
-        component: () => import('@/views/uikit/system_ui/TimelineDoc.vue'),
+        component: () => import('@/views/uikit/system_ui/SurveyDetail.vue'),
       },
       {
         path: '/system/regist-survey', // (실제 경로는 다를 수 있습니다)

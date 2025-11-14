@@ -106,6 +106,12 @@ function goToRegistSurvey() {
     name: 'RegistSurvey',
   });
 }
+function goToSurveyDetail(id) {
+  router.push({
+    name: 'SurveyDetail',
+    params: { id: id },
+  });
+}
 
 function initFilters1() {
   filters1.value = {
@@ -249,7 +255,7 @@ function formatDate(value) {
       </Column>
       <Column header="상세보기" style="min-width: 10rem">
         <template #body="{ data }">
-          <SurveyDetailButton :surveyId="data.id" />
+          <SurveyDetailButton @click="goToSurveyDetail(data.id)" :surveyId="data.id" />
         </template>
       </Column>
     </DataTable>
