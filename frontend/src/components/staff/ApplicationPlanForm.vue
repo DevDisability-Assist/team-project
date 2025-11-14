@@ -64,12 +64,8 @@ const addForm = () => forms.value.push(createForm());
           <!-- 작성자 / 담당자 -->
           <div class="flex flex-col md:flex-row gap-2">
             <div class="flex flex-wrap gap-2 w-full">
-              <label>작성자</label>
+              <label>반려사유</label>
               <InputText v-model="form.writer" type="text" />
-            </div>
-            <div class="flex flex-wrap gap-2 w-full">
-              <label>담당자</label>
-              <InputText v-model="form.manager" type="text" />
             </div>
           </div>
 

@@ -6,7 +6,6 @@
 const survey_select = `
 SELECT 
     survey_no, 
-    ward_no, 
     business_name, 
     purpose, 
     content, 
@@ -16,7 +15,7 @@ SELECT
     created_at, 
     updated_at
 FROM survey
-ORDER BY survey_no DESC;`;
+ORDER BY survey_no DESC`;
 
 module.exports = {
   survey_select,
