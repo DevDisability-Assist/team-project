@@ -5,6 +5,8 @@
 const findUserById = `
 SELECT user_id, 
        password, 
+       user_name,
+       email,
        role AS user_role
 FROM member
 WHERE user_id = ?`;

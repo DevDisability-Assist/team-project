@@ -1,7 +1,10 @@
 <script setup>
 import { ref } from 'vue';
+import { useAuthStore } from '@/stores/authStore';
 
 import AppMenuItem from './AppMenuItem.vue';
+
+const authStore = useAuthStore();
 
 const model = ref([
   {
@@ -12,7 +15,7 @@ const model = ref([
     label: 'UI Components',
     items: [
       { label: '로그인', icon: 'pi pi-fw pi-sign-in', to: '/login' },
-      { label: '로그아웃', icon: 'pi pi-fw pi-sign-out', to: '/logout' },
+      { label: '로그아웃', icon: 'pi pi-fw pi-sign-out', command: () => authStore.logout() },
       { label: '기관 담당자 대시보드', icon: 'pi pi-fw pi-home', to: { name: 'staffhome' } },
       { label: '이용자 상담신청', icon: 'pi pi-fw pi-home', to: { name: 'counseling-apply' } },
       { label: '이용자 상담내역', icon: 'pi pi-fw pi-home', to: { name: 'counseling-history' } },

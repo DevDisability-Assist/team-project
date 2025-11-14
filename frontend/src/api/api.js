@@ -47,7 +47,8 @@ api.interceptors.response.use(
     const originalRequest = error.config;
     const authStore = useAuthStore();
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    // 401 에러이고, 재시도한 요청이 아니며, 로그인 요청이 아닐 때만 토큰 갱신
+    if (error.response?.status === 401 && !originalRequest._retry && originalRequest.url !== '/api/auth/login') {
       if (isRefreshing) {
         return new Promise(function (resolve, reject) {
           failedQueue.push({ resolve, reject });
@@ -82,5 +83,27 @@ api.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+// API 서비스 객체
+export const reservationApi = {
+  /**
+   * 나의 상담 내역을 조회합니다.
+   * (GET /api/reservations/my)
+   * @returns {Promise<AxiosResponse<any>>}
+   */
+  getMyReservations: () => {
+    return api.get('/api/user/reservations/my');
+  },
+
+  /**
+   * 특정 예약을 취소합니다.
+   * (POST /api/reservations/cancel/:reservationId)
+   * @param {number} reservationId - 취소할 예약 ID (res_no)
+   * @returns {Promise<AxiosResponse<any>>}
+   */
+  cancelReservation: (reservationId) => {
+    return api.post(`/api/user/reservations/cancel/${reservationId}`);
+  },
+};
 
 export default api;

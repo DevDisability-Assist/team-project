@@ -5,7 +5,7 @@ const router = useRouter();
 
 // 로그인 화면으로 이동하는 함수
 const goToLogin = () => {
-  router.push({ name: 'Login' });
+  router.push({ name: 'login' });
 };
 // 회원가입 화면으로 이동하는 함수
 const goToSignUp = () => {

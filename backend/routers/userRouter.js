@@ -12,6 +12,14 @@ router.get("/schedule/available", consultService.getAvailableSchedules);
 // router.post('/reserve', authMiddleware, scheduleService.createReservation);
 router.post("/schedule/reserve", consultService.createReservation);
 
+// GET /api/reservations/my : 나의 상담 내역 조회 (UI 연동)
+// (라우터 파일의 prefix가 /api 라면, 실제 경로는 /api/reservations/my)
+router.get("/reservations/my", consultService.getMyReservations);
+
+// POST /api/reservations/cancel/:res_no : 나의 상담 예약 취소 (UI 연동)
+// (실제 경로는 /api/reservations/cancel/123)
+router.post("/reservations/cancel/:res_no", consultService.cancelMyReservation);
+
 // 일반 이용자 로그인 페이지에서 출력되는 마감 임박 공고 목록 조회.(데이터부족으로 2년치 조회 쿼리문으로 사용 중.)
 router.get("/user-notices", async (req, res) => {
   let nowNotices = [];

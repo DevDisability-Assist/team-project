@@ -1,7 +1,7 @@
 export default [
   {
     path: '/login',
-    name: 'Login',
+    name: 'login',
     component: () => import('../views/pages/Login.vue'),
     meta: { requiresAuth: false }, // 인증X
   },

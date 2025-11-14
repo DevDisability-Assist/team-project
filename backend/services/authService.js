@@ -10,7 +10,7 @@ const findUserById = async (userId) => {
 // 토큰 생성 (동일)
 const generateTokens = (user) => {
   const accessToken = jwt.sign(
-    { id: user.user_id, role: user.user_role },
+    { id: user.user_id, role: user.user_role, name: user.user_name },
     process.env.ACCESS_TOKEN_SECRET,
     { expiresIn: "15m" }
   );
@@ -34,9 +34,17 @@ const login = async (userId, password) => {
     throw new Error("User not found");
   }
   const user = users[0];
-  console.log("유저: ", user);
+  console.log("[AuthService] User found:", user);
+  console.log("[AuthService] DB password hash length:", user.password?.length || 'N/A');
+
+  // [추가] DB에 비밀번호가 없는 경우에 대한 방어 코드
+  if (!user.password) {
+    console.warn(`[AuthService] Login Failed: Password not set for user (userId: ${userId})`);
+    throw new Error("Invalid credentials"); // 보안을 위해 동일한 에러 메시지 사용
+  }
 
   // 2. 비밀번호 검증
+  console.log(`[AuthService] DEBUG: Comparing password. Type: ${typeof password}, Value: '${password}'`);
   const match = await bcrypt.compare(password, user.password);
   if (!match) {
     // [로그 추가] 실패 원인 2

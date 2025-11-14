@@ -28,16 +28,25 @@ defineProps({
 </script>
 
 <template>
-  <DataTable :value="data" :loading="loading" :paginator="true" :rows="rows" :rowHover="true" showGridlines>
-    <template #empty>
-      표시할 데이터가 없습니다.
-    </template>
-    <template #loading>
-      데이터를 불러오는 중입니다. 잠시만 기다려주세요.
-    </template>
+  <DataTable
+    :value="data"
+    :loading="loading"
+    :paginator="true"
+    :rows="rows"
+    :rowHover="true"
+    showGridlines
+  >
+    <template #empty> 표시할 데이터가 없습니다. </template>
+    <template #loading> 데이터를 불러오는 중입니다. 잠시만 기다려주세요. </template>
 
     <!-- columns prop을 기반으로 컬럼을 동적으로 생성 -->
-    <Column v-for="col in columns" :key="col.field" :field="col.field" :header="col.header" :style="col.style">
+    <Column
+      v-for="col in columns"
+      :key="col.field"
+      :field="col.field"
+      :header="col.header"
+      :style="col.style"
+    >
       <!-- 
         각 컬럼의 body를 커스터마이징하기 위한 스코프 슬롯입니다.
         슬롯 이름은 'body-{field}' 형식으로 지정됩니다. (예: <template #body-status="{ data }">)

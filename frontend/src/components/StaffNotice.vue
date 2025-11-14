@@ -31,11 +31,41 @@ const staffColumns = ref([
 // 컴포넌트가 마운트되기 전에 실행될 훅
 onBeforeMount(() => {
   surveys.value = [
-    { id: 'SUR-001', name: '2025년 1분기 만족도 조사', institution: '보건복지부', status: '진행중', modifiedDate: '2025-11-10' },
-    { id: 'SUR-002', name: '발달장애인 지원 프로그램 설문', institution: '고용노동부', status: '마감', modifiedDate: '2025-11-05' },
-    { id: 'SUR-003', name: '커뮤니티 시설 이용 현황 조사', institution: '지방자치단체', status: '진행중', modifiedDate: '2025-11-12' },
-    { id: 'SUR-004', name: '긴급 돌봄 서비스 수요 조사', institution: '보건복지부', status: '대기', modifiedDate: '2025-10-28' },
-    { id: 'SUR-005', name: '2024년 연말 종합 평가 설문', institution: '기획재정부', status: '마감', modifiedDate: '2025-10-15' },
+    {
+      id: 'SUR-001',
+      name: '2025년 1분기 만족도 조사',
+      institution: '보건복지부',
+      status: '진행중',
+      modifiedDate: '2025-11-10',
+    },
+    {
+      id: 'SUR-002',
+      name: '발달장애인 지원 프로그램 설문',
+      institution: '고용노동부',
+      status: '마감',
+      modifiedDate: '2025-11-05',
+    },
+    {
+      id: 'SUR-003',
+      name: '커뮤니티 시설 이용 현황 조사',
+      institution: '지방자치단체',
+      status: '진행중',
+      modifiedDate: '2025-11-12',
+    },
+    {
+      id: 'SUR-004',
+      name: '긴급 돌봄 서비스 수요 조사',
+      institution: '보건복지부',
+      status: '대기',
+      modifiedDate: '2025-10-28',
+    },
+    {
+      id: 'SUR-005',
+      name: '2024년 연말 종합 평가 설문',
+      institution: '기획재정부',
+      status: '마감',
+      modifiedDate: '2025-10-15',
+    },
   ];
   loading.value = false;
 });
@@ -95,20 +125,23 @@ const getStatusSeverity = (status) => {
   padding: 2rem;
   border-radius: 10px;
   margin-bottom: 1rem;
-  box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
+  box-shadow:
+    0 2px 1px -1px rgba(0, 0, 0, 0.2),
+    0 1px 1px 0 rgba(0, 0, 0, 0.14),
+    0 1px 3px 0 rgba(0, 0, 0, 0.12);
 }
 
 :deep(.p-inputswitch .p-inputswitch-slider) {
-    background: #ef4444;
-    border-color: #ef4444;
+  background: #ef4444;
+  border-color: #ef4444;
 }
 
 :deep(.p-inputswitch.p-inputswitch-checked .p-inputswitch-slider) {
-    background: #22c55e;
-    border-color: #22c55e;
+  background: #22c55e;
+  border-color: #22c55e;
 }
 
 :deep(.p-inputswitch .p-inputswitch-slider:before) {
-    background: #ffffff;
+  background: #ffffff;
 }
 </style>

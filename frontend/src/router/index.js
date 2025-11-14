@@ -138,8 +138,14 @@ router.beforeEach((to, from, next) => {
   // 2. 인증이 필요 없는 페이지 (e.g., 로그인)
   if (to.meta.requiresAuth === false) {
     if (isAuthenticated) {
-      // 2a. 이미 로그인한 사용자가 로그인 페이지 접근 시 -> 홈으로
-      return next({ name: 'dashboard' });
+      // 2a. 이미 로그인한 사용자가 로그인 페이지 접근 시 -> 역할에 맞는 홈으로
+      if (userRole === 'USER') {
+        return next({ name: 'userhome' });
+      } else if (userRole === 'STAFF') {
+        return next({ name: 'staffhome' });
+      } else {
+        return next({ name: 'sysDashboard' });
+      }
     }
     return next();
   }
