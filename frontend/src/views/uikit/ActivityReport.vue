@@ -39,7 +39,7 @@ const getStatusSeverity = (status) => {
 onBeforeMount(async () => {
   initFilters();
   try {
-    const res = await axios.get('/api/staff'); // ⭐ 여기로 DB 조회됨
+    const res = await axios.get('/api/staff/survey-select'); // ⭐ 여기로 DB 조회됨
     console.log('res', res);
     surveys.value = res.data; // ⭐ DB → Vue DataTable 바로 연결
   } catch (err) {

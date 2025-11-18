@@ -17,9 +17,24 @@ const wardId = ref(null); // ⭐ 초기값은 null
 
 onMounted(async () => {
   try {
-    const res = await axios.get(`/api/survey/${props.surveyNo}`);
-    survey.value = res.data; // survey_no, ward_no 포함
-    wardId.value = res.data.ward_no; // ⭐ 여기서 wardId 값이 설정됨
+    const res = await axios.get(`/api/staff/${props.surveyNo}`);
+    // ⭐ DB 응답 전체 로그는 확인용으로 남겨둡니다.
+    console.log('DB 응답 전체:', res.data);
+
+    // 1. 응답 데이터의 result 배열의 첫 번째 요소에 접근
+    const wardData = res.data.result && res.data.result.length > 0 ? res.data.result[0] : null;
+
+    if (wardData) {
+      // 2. 한글 키 '피보호자번호'를 사용하여 wardId 설정
+      // 만약 wardData가 survey 테이블의 정보를 포함한다면 'ward_no' 키를 사용해야 할 수도 있습니다.
+      // 하지만 wardsearch 쿼리 결과이므로 '피보호자번호'를 사용합니다.
+      wardId.value = wardData['피보호자번호']; // ⭐ 대괄호 표기법으로 한글 키 접근
+
+      survey.value = wardData;
+    } else {
+      console.error('조회된 피보호자 데이터가 없습니다.');
+    }
+
     console.log('Survey.vue가 DB에서 조회한 wardId:', wardId.value);
   } catch (err) {
     console.error('Survey 상세 조회 오류:', err);
