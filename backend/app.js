@@ -39,8 +39,8 @@ const signupRouter = require("./routers/signupRouter.js");
 app.use("/register", signupRouter);
 
 // 시스템 관리자의 권한 승인 목록 보기 모듈
-const approvalRouter = require("./routers/approvalRouter.js");
-app.use("/approval", approvalRouter);
+// const approvalRouter = require("./routers/approvalRouter.js");
+// app.use("/approval", approvalRouter);
 
 // 시스템 관리자의 등록된 기관 목록 보기 모듈
 const institutionRouter = require("./routers/systemRouter.js");

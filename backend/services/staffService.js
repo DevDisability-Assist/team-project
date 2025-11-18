@@ -1,20 +1,7 @@
 const db = require("../database/mappers/mapper");
 
-<<<<<<< HEAD
 exports.surveySelect = async (req, res) => {
-  console.log("서베이셀렉트 ");
-  let result = await db.query("surveySelect", []);
-  console.log("여기다, ", result);
-  res.send(result);
-};
-
-exports.supportPlan = async (req, res) => {
-  console.log("돌겠네");
-=======
-// 1. surveySelect: 조사 목록 조회 (피보호자 이름/주소 포함)
-const surveySelect = async (req, res) => {
   console.log("Survey List 조회");
->>>>>>> main-bjw
   try {
     // sql_queries.js에 새로 추가된 surveyWardJoinSelect 쿼리를 사용
     let result = await db.query("surveyWardJoinSelect", []);
@@ -28,11 +15,8 @@ const surveySelect = async (req, res) => {
   }
 };
 
-<<<<<<< HEAD
-exports.wardsearch = async (req, res) => {
-=======
 // 2. getSurveyDetail: 단일 조사지 상세 정보 조회 (front-end의 Survey 컴포넌트가 호출)
-const getSurveyDetail = async (req, res) => {
+exports.getSurveyDetail = async (req, res) => {
   console.log(
     "*****************************************\n나는 서베이디테일을 조회할것입니다"
   );
@@ -44,7 +28,6 @@ const getSurveyDetail = async (req, res) => {
     return res.status(400).send({ message: "조사 번호가 필요합니다." });
   }
 
->>>>>>> main-bjw
   try {
     // 상세 조회용 쿼리 이름(예: surveySelectDetail)과 파라미터 전달
     let result = await db.query("wardsearch", surveyNo);
@@ -64,7 +47,7 @@ const getSurveyDetail = async (req, res) => {
   }
 };
 
-const supportPlan = async (req, res) => {
+exports.supportPlan = async (req, res) => {
   console.log("지원 계획 목록 조회");
   try {
     let result = await db.query("supportPlan", []);
@@ -79,7 +62,7 @@ const supportPlan = async (req, res) => {
 };
 
 // 3. wardsearch: 피보호자 상세 정보 조회 (front-end의 ApplicantInfo 컴포넌트가 호출)
-const wardsearch = async (req, res) => {
+exports.wardsearch = async (req, res) => {
   // URL 파라미터 또는 쿼리에서 ward_no 추출
   const ward_no = req.params.ward_no || req.query.ward_no;
   console.log(`Ward Search 조회: ward_no=${ward_no}`);
@@ -106,7 +89,7 @@ const wardsearch = async (req, res) => {
   }
 };
 
-const createSupportPlan = async (req, res) => {
+exports.createSupportPlan = async (req, res) => {
   console.log("승인요청 POST 데이터:", req.body);
 
   const {
@@ -143,7 +126,7 @@ const createSupportPlan = async (req, res) => {
 };
 
 // 6. planItemList: support_plan 테이블에서 상세 항목 조회
-const planItemList = async (req, res) => {
+exports.planItemList = async (req, res) => {
   console.log("지원 계획 항목 목록 조회");
   try {
     let result = await db.query("planitemtem", []);
@@ -154,7 +137,6 @@ const planItemList = async (req, res) => {
   }
 };
 
-<<<<<<< HEAD
 // 날짜 포맷팅 (YYYY-MM-DD) - 타임존 문제 방지
 function formatDateISO(date) {
   const year = date.getFullYear();
@@ -440,13 +422,4 @@ exports.cancelStaffReservation = async (req, res) => {
     console.error("담당자 예약 취소 오류:", error);
     res.status(500).send({ message: "예약 취소 중 오류가 발생했습니다." });
   }
-=======
-module.exports = {
-  surveySelect,
-  getSurveyDetail,
-  supportPlan,
-  wardsearch,
-  createSupportPlan,
-  planItemList, // 새로 추가된 함수
->>>>>>> main-bjw
 };
