@@ -4,21 +4,19 @@ import InputText from 'primevue/inputtext';
 import Textarea from 'primevue/textarea';
 import Select from 'primevue/select';
 import Button from 'primevue/button';
-import axios from 'axios';
 
 // 전역 고유 id 카운터
 let formId = 0;
 
 // 폼 초기화 함수
 const createForm = () => ({
-  id: formId++,
-  writer: '', // 목표
-  manager: '', // 담당자
-  dropdownItem: null, // 사업선택
-  amount: '', // 금액
-  content: '', // 내용
-  selectedFiles: [], // pdf파일
-  priority: null, // 우선순위
+  id: formId++, // 각 폼 고유 id
+  writer: '', //작성자
+  manager: '', //담당자
+  dropdownItem: null, //사업선택
+  amount: '', //금액
+  content: '', //내용
+  selectedFiles: [], //pdf파일
 });
 
 // 폼 배열
@@ -34,11 +32,10 @@ const dropdownItems = ref([
   { name: '6번 사업', code: 'Option 6' },
 ]);
 
-// 우선순위 선택지
 const priority = ref([
-  { name: '긴급', code: 1 },
-  { name: '중점', code: 2 },
-  { name: '반려', code: 3 },
+  { name: '긴급', code: 'Option 1' },
+  { name: '중점', code: 'Option 2' },
+  { name: '반려', code: 'Option 3' },
 ]);
 
 // 금액 3자리 콤마
@@ -52,43 +49,16 @@ const handleFiles = (event, form) => {
   form.selectedFiles = Array.from(event.target.files);
 };
 
-// 승인요청 버튼 클릭 → 해당 폼 값만 서버로 전송
-const requestApproval = async (form) => {
-  // 필수값 체크
-  if (!form.writer || !form.dropdownItem || !form.content || !form.priority) {
-    alert('필수 항목(목표, 사업, 내용, 우선순위)을 모두 입력해주세요.');
-    return;
-  }
-
-  try {
-    const payload = {
-      priority_no: form.priority.code,
-      support_plan_goal: form.writer,
-      business_name: form.dropdownItem.name,
-      spend: parseInt(form.amount.replace(/,/g, '')) || 0,
-      plan: form.content,
-      file_no: form.selectedFiles.length ? form.selectedFiles.map((f) => f.name).join(',') : null,
-      support_plan_status: '승인대기', // 서버 ENUM에 맞춤
-    };
-
-    await axios.post('/api/staff/support-plan', payload);
-    alert(`폼 ${form.id} 승인요청 완료!`);
-
-    // 전송 후 폼 초기화
-    forms.value = [createForm()];
-  } catch (err) {
-    console.error('승인요청 오류:', err.response?.data || err);
-    alert('승인요청 실패. 서버 로그를 확인하세요.');
-  }
-};
-
-// 버튼 동작
+// 버튼 동작 (각 폼별)
 const saveTemp = (form) => alert(`폼 ${form.id} 임시저장 완료!`);
+const requestApproval = (form) => alert(`폼 ${form.id} 승인요청 완료!`);
 const deleteForm = (id) => {
   if (confirm('정말 삭제하시겠습니까?')) {
     forms.value = forms.value.filter((f) => f.id !== id);
   }
 };
+
+// 폼 추가
 const addForm = () => forms.value.push(createForm());
 </script>
 
@@ -110,7 +80,7 @@ const addForm = () => forms.value.push(createForm());
               />
             </div>
             <div class="flex flex-wrap gap-2 w-full">
-              <label>목표</label>
+              <label>반려사유</label>
               <InputText v-model="form.writer" type="text" />
             </div>
           </div>
@@ -126,7 +96,7 @@ const addForm = () => forms.value.push(createForm());
                 placeholder="Select One"
                 class="w-full"
               />
-              <label>예상지원금액</label>
+              <label>금액</label>
               <InputText
                 v-model="form.amount"
                 type="text"
@@ -156,6 +126,7 @@ const addForm = () => forms.value.push(createForm());
                 class="border p-2 rounded"
                 @change="(e) => handleFiles(e, form)"
               />
+
               <ul v-if="form.selectedFiles.length" class="list-disc ml-5 text-sm text-gray-600">
                 <li v-for="(file, idx) in form.selectedFiles" :key="idx">{{ file.name }}</li>
               </ul>
