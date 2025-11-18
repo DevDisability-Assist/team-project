@@ -6,6 +6,7 @@ const staffService = require("../services/staffService.js");
 // [신규] 인증 미들웨어 임포트
 const { verifyAccessToken } = require("../middleware/authMiddleware");
 
+<<<<<<< HEAD
 router.get("/", staffService.surveySelect);
 // wardsearch
 router.get("/wardsearch", staffService.wardsearch);
@@ -46,6 +47,7 @@ router.post(
   verifyAccessToken,
   staffService.cancelStaffReservation
 );
+=======
 // 실제 라우팅 등록 영역
 // 해당 javascript 파일의 마지막 코드, 모듈화
 // 위에 선언한 기능(변수, 함수 등)들 중 외부로 노출할 대상을 설정
@@ -56,4 +58,5 @@ router.get("/survey-select", staffService.surveySelect);
 
 router.get("/:surveyNo", staffService.getSurveyDetail);
 
+>>>>>>> main-bjw
 module.exports = router;
